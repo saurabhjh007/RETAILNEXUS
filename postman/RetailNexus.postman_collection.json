@@ -1,0 +1,176 @@
+{
+  "info": {
+    "name": "RetailNexus API Collection",
+    "_postman_id": "e2092ab9-c0ad-4cfe-8117-retailnexus",
+    "description": "Comprehensive Postman test collection for RetailNexus Enterprise Inventory Management System.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080/api",
+      "type": "string"
+    },
+    {
+      "key": "token",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "01 Auth",
+      "item": [
+        {
+          "name": "Login as Admin",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"admin\",\n  \"password\": \"admin123\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/auth/login", "host": ["{{baseUrl}}"], "path": ["auth", "login"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "02 Products",
+      "item": [
+        {
+          "name": "Get Products (Paginated)",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": { "raw": "{{baseUrl}}/products?page=0&size=15", "host": ["{{baseUrl}}"], "path": ["products"], "query": [{ "key": "page", "value": "0" }, { "key": "size", "value": "15" }] }
+          }
+        },
+        {
+          "name": "Get Categories",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": { "raw": "{{baseUrl}}/products/categories", "host": ["{{baseUrl}}"], "path": ["products", "categories"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "03 Warehouses",
+      "item": [
+        {
+          "name": "Get Warehouses",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": { "raw": "{{baseUrl}}/warehouses", "host": ["{{baseUrl}}"], "path": ["warehouses"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "04 Inventory & Movements",
+      "item": [
+        {
+          "name": "Get Stock Levels",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": { "raw": "{{baseUrl}}/inventory/stock-levels", "host": ["{{baseUrl}}"], "path": ["inventory", "stock-levels"] }
+          }
+        },
+        {
+          "name": "Adjust Stock",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"productId\": 1,\n  \"warehouseId\": 1,\n  \"quantity\": 10,\n  \"adjustmentType\": \"ADD\",\n  \"reason\": \"CYCLE_COUNT\",\n  \"notes\": \"Physical cycle count verified extra stock\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/inventory/adjust", "host": ["{{baseUrl}}"], "path": ["inventory", "adjust"] }
+          }
+        },
+        {
+          "name": "Transfer Stock",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"productId\": 1,\n  \"fromWarehouseId\": 1,\n  \"toWarehouseId\": 2,\n  \"quantity\": 5,\n  \"notes\": \"Inter-depot transfer for seasonal rebalancing\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/inventory/transfer", "host": ["{{baseUrl}}"], "path": ["inventory", "transfer"] }
+          }
+        },
+        {
+          "name": "Get Movements Ledger",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": { "raw": "{{baseUrl}}/inventory/movements", "host": ["{{baseUrl}}"], "path": ["inventory", "movements"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "05 Reports",
+      "item": [
+        {
+          "name": "Get Valuation Summary",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": { "raw": "{{baseUrl}}/reports/valuation", "host": ["{{baseUrl}}"], "path": ["reports", "valuation"] }
+          }
+        },
+        {
+          "name": "Export Inventory CSV",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": { "raw": "{{baseUrl}}/reports/export/inventory-csv", "host": ["{{baseUrl}}"], "path": ["reports", "export", "inventory-csv"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "06 Agile Delivery",
+      "item": [
+        {
+          "name": "Get 15 Scrum Sprints",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": { "raw": "{{baseUrl}}/agile/sprints", "host": ["{{baseUrl}}"], "path": ["agile", "sprints"] }
+          }
+        }
+      ]
+    }
+  ]
+}
