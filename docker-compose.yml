@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  retailnexus-mysql:
+    image: mysql:8.0
+    container_name: retailnexus-mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: retailnexus123
+      MYSQL_DATABASE: retailnexus_db
+      MYSQL_USER: retailnexus
+      MYSQL_PASSWORD: retailnexus123
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./database/schema.sql:/docker-entrypoint-initdb.d/01_schema.sql:ro
+      - ./database/seed-data.sql:/docker-entrypoint-initdb.d/02_seed.sql:ro
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-pretailnexus123"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  mysql_data:
+    driver: local
